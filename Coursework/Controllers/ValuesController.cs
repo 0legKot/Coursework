@@ -53,9 +53,9 @@ namespace Coursework.Controllers
             }
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody]JObject jsonData)
+        // POST api/values/5
+        [HttpPost("{id}")]
+        public async Task Post(int id, [FromBody]JObject jsonData)
         {
             using (var client = _consulClientFactory())
             {

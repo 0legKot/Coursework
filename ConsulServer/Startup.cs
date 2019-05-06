@@ -41,10 +41,7 @@ namespace ConsulServer
             }
 
             app.UseHttpsRedirection();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute("default", "{controller=Values}/{action=AllGets}/{query?}");
-            });
+            app.UseMvc();
         }
     }
 }

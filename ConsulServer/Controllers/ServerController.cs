@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -7,6 +8,8 @@ using System.Threading.Tasks;
 using Consul;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Polly;
 using Polly.Retry;
 
@@ -28,11 +31,12 @@ namespace ConsulServer.Controllers
             _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        [HttpGet]
+        [HttpGet("get")]
         [HttpGet("get/{query}")]
         public async Task<string> AllGets([FromRoute] string query)
         {
             await Initialize();
+            query = query ?? "";
              return await _serverRetryPolicy.ExecuteAsync(async () =>
              {
                  var serverUrl = _serverUrls[_currentConfigIndex];
@@ -40,6 +44,36 @@ namespace ConsulServer.Controllers
                  var response = await _apiClient.GetAsync(requestPath).ConfigureAwait(false);
                  return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
              });
+        }
+
+        [HttpPost("post")]
+        [HttpPost("post/{query}")]
+        public async Task<string> AllPosts([FromRoute] string query,[FromBody]JObject body)
+        {
+            await Initialize();
+            query = query ?? "";
+            return await _serverRetryPolicy.ExecuteAsync(async () =>
+            {
+                var serverUrl = _serverUrls[_currentConfigIndex];
+                var requestPath = $"{serverUrl}api/values/{query.Replace('|', '/')}";
+                var response = await _apiClient.PostAsJsonAsync(requestPath, JsonConvert.DeserializeObject<object>(body.ToString())).ConfigureAwait(false);
+                return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            });
+        }
+
+        [HttpDelete("delete")]
+        [HttpDelete("delete/{query}")]
+        public async Task<string> AllDeletes([FromRoute] string query)
+        {
+            await Initialize();
+            query = query ?? "";
+            return await _serverRetryPolicy.ExecuteAsync(async () =>
+            {
+                var serverUrl = _serverUrls[_currentConfigIndex];
+                var requestPath = $"{serverUrl}api/values/{query.Replace('|', '/')}";
+                var response = await _apiClient.DeleteAsync(requestPath).ConfigureAwait(false);
+                return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            });
         }
 
         public async Task Initialize()
@@ -60,6 +94,7 @@ namespace ConsulServer.Controllers
                     _serverUrls.Add(serviceUri);
                 }
             }
+            _currentConfigIndex = new Random().Next(_serverUrls.Count);
             var retries = _serverUrls.Count * 2 - 1;
             _serverRetryPolicy = Policy.Handle<HttpRequestException>()
                 .RetryAsync(retries, (exception, retryCount) =>
