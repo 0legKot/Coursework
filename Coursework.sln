@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coursework", "Coursework\Coursework.csproj", "{52ECAF27-F072-4502-84BF-4EA93E4D596E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsulService", "Coursework\ConsulService.csproj", "{52ECAF27-F072-4502-84BF-4EA93E4D596E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsulServer", "ConsulServer\ConsulServer.csproj", "{ED0A6FAE-1A1B-4EDD-878D-6E7BF5A81D18}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{52ECAF27-F072-4502-84BF-4EA93E4D596E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52ECAF27-F072-4502-84BF-4EA93E4D596E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52ECAF27-F072-4502-84BF-4EA93E4D596E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED0A6FAE-1A1B-4EDD-878D-6E7BF5A81D18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED0A6FAE-1A1B-4EDD-878D-6E7BF5A81D18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED0A6FAE-1A1B-4EDD-878D-6E7BF5A81D18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED0A6FAE-1A1B-4EDD-878D-6E7BF5A81D18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
