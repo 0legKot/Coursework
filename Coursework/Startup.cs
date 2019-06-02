@@ -4,13 +4,17 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Consul;
+using ConsulService.Models;
+using ConsulService.Services;
 using Coursework.Config;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,6 +36,7 @@ namespace Coursework
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IHostedService, ConsulHostedService>();
+            services.AddSingleton<IMessageSender, RabbitSender>();
             services.Configure<ConsulConfig>(Configuration.GetSection("ConsulConfig"));
             services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(consulConfig =>
             {
@@ -44,8 +49,12 @@ namespace Coursework
                 var address = Configuration["ConsulConfig:Address"];
                 consulConfig.Address = new Uri(address);
             }));
+            string connection = Configuration.GetConnectionString("MoneyDb");
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));
+            services.AddIdentity<User, Role>()
+               .AddEntityFrameworkStores<DataContext>()
+               .AddDefaultTokenProviders();
 
-            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
         }
