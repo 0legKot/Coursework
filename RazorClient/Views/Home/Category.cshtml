@@ -26,7 +26,7 @@
         </tr>
         <tr>
             <td>Maximum value</td>
-            <td><input type="text" asp-for="Limit" value="@Model.Limit" /></td>
+            <td><input type="text" asp-for="Limit" pattern="[0-9]+([,][0-9]{1,2})?" value="@Model.Limit" /></td>
         </tr>
     </table>
     <input type="submit" value="Save" class="btn" />

@@ -64,8 +64,25 @@ namespace RazorClient.Controllers
         {
             DoRequest($"/categories/{model.Id}", "POST", model.ToString());
            
+            return RedirectToAction("Categories", "Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeCurrency(Currency model)
+        {
+            DoRequest($"/currencies/{model.Id}", "POST", model.ToString());
+
+            return RedirectToAction("Currencies", "Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeTransaction(Transaction model)
+        {
+            DoRequest($"/transactions/{model.Id}", "POST", model.ToString());
+
             return RedirectToAction("Index", "Home");
         }
+
 
         public IActionResult Delete(string what)
         {

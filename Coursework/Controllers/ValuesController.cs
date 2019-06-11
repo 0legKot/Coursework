@@ -173,7 +173,7 @@ namespace Coursework.Controllers
             else
             {
                 found.Comment = jsonData["Comment"].ToString();
-                found.Value = jsonData["Value"].ToString().ToInt();
+                found.Value = jsonData["Value"].ToString().ToDecimal();
                 found.Category = _context.Categories.FirstOrDefault(x => x.Id == jsonData["CategoryId"].ToString().ToInt());
                 found.Currency = _context.Currencies.FirstOrDefault(x => x.Id == jsonData["CurrencyId"].ToString().ToInt());
             }
