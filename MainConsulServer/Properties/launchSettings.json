@@ -2,25 +2,25 @@
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false, 
-    "anonymousAuthentication": true,
+    "anonymousAuthentication": true, 
     "iisExpress": {
-      "applicationUrl": "http://localhost:5000",
-      "sslPort": 5000
+      "applicationUrl": "http://localhost:1899",
+      "sslPort": 44303
     }
   },
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "get/transactions",
+      "launchUrl": "api/values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "ConsulServer": {
+    "MainConsulServer": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "get/transactions",
+      "launchUrl": "api/values",
       "applicationUrl": "https://localhost:44304;http://localhost:44303",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

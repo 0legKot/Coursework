@@ -18,8 +18,8 @@ namespace RazorClient.Controllers
 {
     public class HomeController : Controller
     {
-        //const string apiUri = "https://localhost:44391/";
-        const string apiUri = "https://localhost:44394/api/values";
+        const string apiUri = "https://localhost:44304/api/";
+        //const string apiUri = "https://localhost:44394/api/values";
         public IActionResult Index()
         {
             IEnumerable<Transaction> messages = JsonConvert.DeserializeObject<IEnumerable<Transaction>>(DoRequest( "/transactions"));
@@ -41,28 +41,28 @@ namespace RazorClient.Controllers
         public IActionResult Transaction(int id)
         {
             if (id == 0) return View(new Transaction());
-            var message = JsonConvert.DeserializeObject<Transaction>(DoRequest( "/transactions/" + id.ToString()));
+            var message = JsonConvert.DeserializeObject<Transaction>(DoRequest( "/transactions|" + id.ToString()));
             return View(message);
         }
 
         public IActionResult Currency(int id)
         {
             if (id == 0) return View(new Currency());
-            var message = JsonConvert.DeserializeObject<Currency>(DoRequest( "/currencies/" + id.ToString()));
+            var message = JsonConvert.DeserializeObject<Currency>(DoRequest( "/currencies|" + id.ToString()));
             return View(message);
         }
 
         public IActionResult Category(int id)
         {
             if (id == 0) return View(new Category());
-            var message = JsonConvert.DeserializeObject<Category>(DoRequest("/categories/"+id.ToString()));
+            var message = JsonConvert.DeserializeObject<Category>(DoRequest("/categories|"+id.ToString()));
             return View(message);
         }
 
         [HttpPost]
         public async Task<IActionResult> ChangeCategory(Category model)
         {
-            DoRequest($"/categories/{model.Id}", "POST", model.ToString());
+            DoRequest($"/categories|{model.Id}", "POST", model.ToString());
            
             return RedirectToAction("Categories", "Home");
         }
@@ -70,7 +70,7 @@ namespace RazorClient.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeCurrency(Currency model)
         {
-            DoRequest($"/currencies/{model.Id}", "POST", model.ToString());
+            DoRequest($"/currencies|{model.Id}", "POST", model.ToString());
 
             return RedirectToAction("Currencies", "Home");
         }
@@ -78,7 +78,7 @@ namespace RazorClient.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeTransaction(Transaction model)
         {
-            DoRequest($"/transactions/{model.Id}", "POST", model.ToString());
+            DoRequest($"/transactions|{model.Id}", "POST", model.ToString());
 
             return RedirectToAction("Index", "Home");
         }
@@ -169,7 +169,7 @@ namespace RazorClient.Controllers
         {
             byte[] dataBytes = Encoding.UTF8.GetBytes(data);
 
-            uri = apiUri + /*method.ToLower() +*/ uri;
+            uri = apiUri + method.ToLower() + uri;
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
             request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
             request.ContentLength = dataBytes.Length;

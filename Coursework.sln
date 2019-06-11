@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsulServer", "ConsulServe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQConsumer", "RabbitMQConsumer\RabbitMQConsumer.csproj", "{34CD3754-E1A5-4F90-AB05-2E0924D550BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorClient", "RazorClient\RazorClient.csproj", "{6832562E-E554-48B2-BDFE-939A5A3B2895}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorClient", "RazorClient\RazorClient.csproj", "{6832562E-E554-48B2-BDFE-939A5A3B2895}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
