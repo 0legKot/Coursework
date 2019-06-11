@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsulService", "Coursework
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsulServer", "ConsulServer\ConsulServer.csproj", "{ED0A6FAE-1A1B-4EDD-878D-6E7BF5A81D18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQConsumer", "RabbitMQConsumer\RabbitMQConsumer.csproj", "{34CD3754-E1A5-4F90-AB05-2E0924D550BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQConsumer", "RabbitMQConsumer\RabbitMQConsumer.csproj", "{34CD3754-E1A5-4F90-AB05-2E0924D550BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorClient", "RazorClient\RazorClient.csproj", "{6832562E-E554-48B2-BDFE-939A5A3B2895}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{34CD3754-E1A5-4F90-AB05-2E0924D550BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34CD3754-E1A5-4F90-AB05-2E0924D550BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34CD3754-E1A5-4F90-AB05-2E0924D550BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6832562E-E554-48B2-BDFE-939A5A3B2895}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6832562E-E554-48B2-BDFE-939A5A3B2895}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6832562E-E554-48B2-BDFE-939A5A3B2895}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6832562E-E554-48B2-BDFE-939A5A3B2895}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

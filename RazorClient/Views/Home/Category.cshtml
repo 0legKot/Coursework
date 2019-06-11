@@ -1,0 +1,33 @@
+﻿@using ConsulService.Models
+@model Category
+@{
+    ViewData["Title"] = "Category";
+}
+
+<form asp-action="ChangeCategory" asp-controller="Home">
+    <input type="hidden" asp-for="Id" value="@Model.Id" />
+    <h2>Category</h2>
+    <h3>Is this CREDIT? <input type="checkbox" asp-for="IsCredit" value="@Model.IsCredit" /></h3>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <td>Property</td>
+                <td>Value</td>
+            </tr>
+        </thead>
+        <tr>
+            <td>Id</td>
+            <td>@Model.Id</td>
+        </tr>
+        <tr>
+            <td>Name</td>
+            <td><input type="text" asp-for="Name" value="@Model.Name" /></td>
+        </tr>
+        <tr>
+            <td>Maximum value</td>
+            <td><input type="text" asp-for="Limit" value="@Model.Limit" /></td>
+        </tr>
+    </table>
+    <input type="submit" value="Save" class="btn" />
+</form>

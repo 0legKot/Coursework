@@ -51,9 +51,6 @@ namespace Coursework
             }));
             string connection = Configuration.GetConnectionString("MoneyDb");
             services.AddDbContext<DataContext>(options => options.UseSqlServer(connection));
-            services.AddIdentity<User, Role>()
-               .AddEntityFrameworkStores<DataContext>()
-               .AddDefaultTokenProviders();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -71,6 +68,7 @@ namespace Coursework
             {
                 app.UseHsts();
             }
+            app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
         }

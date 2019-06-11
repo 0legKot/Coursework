@@ -1,0 +1,14 @@
+﻿@using ConsulService.Models
+@model IEnumerable<LogMessage>
+@{
+    ViewData["Title"] = "Rabbit";
+}
+
+<h2>Rabbit</h2>
+<table class="table">
+    <thead><tr><td>Id</td><td>Message</td></tr></thead>
+    @foreach (LogMessage log in Model)
+    {
+        <tr><td> @log.Id </td><td> @log.Message </td></tr>
+    }
+</table>

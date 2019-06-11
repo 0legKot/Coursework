@@ -1,0 +1,22 @@
+﻿@using ConsulService.Models
+@model Transaction
+@{
+    ViewData["Title"] = "Transaction";
+}
+
+<h2>Transaction</h2>
+
+<h3>This is transaction with id=@Model.Id with currency @Model.Currency.Name, which has rate of @Model.Currency.Rate compared to USD</h3>
+<h4>Information about its category:</h4>
+@if (Model.Category.IsCredit)
+{
+    <h3>This is CREDIT!</h3>
+}
+else
+{
+    <h3>This is debit!</h3>
+}
+<h4>Name of category: @Model.Category.Name</h4>
+<h4>It has a limit of @Model.Category.Limit</h4>
+<h3>Value of this transaction is: @Model.Value</h3>
+<h4>Comments on transaction: @Model.Comment</h4>

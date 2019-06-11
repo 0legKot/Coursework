@@ -1,0 +1,10 @@
+﻿@using ConsulService.Models
+@model Currency
+@{
+    ViewData["Title"] = "Currency";
+}
+
+<h2>Currency</h2>
+<a class="btn btn-danger">Delete</a>
+<h3>This is @Model.Name currency with id=@Model.Id</h3>
+<h3>Its rate compared to USD: @Model.Rate</h3>

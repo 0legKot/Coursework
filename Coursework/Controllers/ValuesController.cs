@@ -7,19 +7,20 @@ using Consul;
 using ConsulService.Models;
 using ConsulService.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 
 namespace Coursework.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DataController : ControllerBase
+    public class ValuesController : ControllerBase
     {
         private readonly Func<IConsulClient> _consulClientFactory;
         private readonly IMessageSender _messageSender;
         private readonly DataContext _context;
 
-        public DataController(Func<IConsulClient> consulClientFactory, IMessageSender messageSender, DataContext context)
+        public ValuesController(Func<IConsulClient> consulClientFactory, IMessageSender messageSender, DataContext context)
         {
             _consulClientFactory = consulClientFactory;
             _messageSender = messageSender;
@@ -44,7 +45,7 @@ namespace Coursework.Controllers
         public async Task<IEnumerable<Category>> Get()
         {
             var result = _context.Categories;
-            _messageSender.SendMessage($"Client reseived {result.Count()} categories");
+            _messageSender.SendMessage($"Client received {result.Count()} categories");
             return result;
            
         }
@@ -53,7 +54,7 @@ namespace Coursework.Controllers
         public async Task<Category> Get(int id)
         {
             var result = _context.Categories.FirstOrDefault(x=>x.Id==id);
-            _messageSender.SendMessage($"Client reseived category with id = {id}");
+            _messageSender.SendMessage($"Client received category with id = {id}");
             return result;
         }
 
@@ -77,7 +78,7 @@ namespace Coursework.Controllers
             }
             
             _context.SaveChanges();
-            _messageSender.SendMessage($"Client reseived category with id = {id}");
+            _messageSender.SendMessage($"Client sent category with id = {id}");
         }
 
         [HttpDelete("categories/{id}")]
@@ -86,7 +87,7 @@ namespace Coursework.Controllers
             var todelete = _context.Categories.FirstOrDefault(x=>x.Id==id);
             _context.Remove(todelete);
             _context.SaveChanges();
-            _messageSender.SendMessage($"Client reseived category with id = {id}");
+            _messageSender.SendMessage($"Client deleted category with id = {id}");
         }
 
         [HttpGet("currencies")]
@@ -102,33 +103,31 @@ namespace Coursework.Controllers
         public async Task<Currency> GetCurrencies(int id)
         {
             var result = _context.Currencies.FirstOrDefault(x => x.Id == id);
-            _messageSender.SendMessage($"Client reseived category with id = {id}");
+            _messageSender.SendMessage($"Client received category with id = {id}");
             return result;
         }
 
         [HttpPost("currencies/{id}")]
         public async Task PostCurrencies(int id, [FromBody]JObject jsonData)
         {
-            var found = _context.Categories.FirstOrDefault(x => x.Id == Convert.ToInt32(jsonData["Id"].ToString()));
+            var found = _context.Currencies.FirstOrDefault(x => x.Id == Convert.ToInt32(jsonData["Id"].ToString()));
 
             if (found == null)
             {
-                _context.Categories.Add(new Category()
+                _context.Currencies.Add(new Currency()
                 {
                     Name = jsonData["Name"].ToString(),
-                    Limit = jsonData["Limit"].ToString().ToDecimal(),
-                    IsCredit = jsonData["IsCredit"].ToString().ToBool()
+                    Rate = jsonData["Rate"].ToString().ToDecimal(),
                 });
             }
             else
             {
                 found.Name = jsonData["Name"].ToString();
-                found.Limit = jsonData["Limit"].ToString().ToDecimal();
-                found.IsCredit = jsonData["IsCredit"].ToString().ToBool();
+                found.Rate = jsonData["Rate"].ToString().ToDecimal();
             }
 
             _context.SaveChanges();
-            _messageSender.SendMessage($"Client reseived Currency with id = {id}");
+            _messageSender.SendMessage($"Client sent Currency with id = {id}");
         }
 
         [HttpDelete("currencies/{id}")]
@@ -137,11 +136,94 @@ namespace Coursework.Controllers
             var todelete = _context.Currencies.FirstOrDefault(x => x.Id == id);
             _context.Remove(todelete);
             _context.SaveChanges();
-            _messageSender.SendMessage($"Client reseived Currency with id = {id}");
+            _messageSender.SendMessage($"Client deleted Currency with id = {id}");
+        }
+        [HttpGet("transactions")]
+        public async Task<IEnumerable<Transaction>> GetTransactions()
+        {
+            var result = _context.Transactions.Include(x => x.Currency).Include(x => x.Category);
+            _messageSender.SendMessage($"Client received {result.Count()} transactions");
+            return result;
+
+        }
+
+        [HttpGet("transactions/{id}")]
+        public async Task<Transaction> GetTransactions(int id)
+        {
+            var result = _context.Transactions.Include(x => x.Category).Include(x => x.Currency).FirstOrDefault(x => x.Id == id);
+            _messageSender.SendMessage($"Client received transaction with id = {id}");
+            return result;
+        }
+
+        [HttpPost("transactions/{id}")]
+        public async Task PostTransactions(int id, [FromBody]JObject jsonData)
+        {
+            var found = _context.Transactions.FirstOrDefault(x => x.Id == Convert.ToInt32(jsonData["Id"].ToString()));
+
+            if (found == null)
+            {
+                _context.Transactions.Add(new Transaction()
+                {
+                    Comment = jsonData["Comment"].ToString(),
+                    Value = jsonData["Value"].ToString().ToDecimal(),
+                    Category = _context.Categories.FirstOrDefault(x => x.Id == jsonData["CategoryId"].ToString().ToInt()),
+                    Currency = _context.Currencies.FirstOrDefault(x => x.Id == jsonData["CurrencyId"].ToString().ToInt()),
+                });
+            }
+            else
+            {
+                found.Comment = jsonData["Comment"].ToString();
+                found.Value = jsonData["Value"].ToString().ToInt();
+                found.Category = _context.Categories.FirstOrDefault(x => x.Id == jsonData["CategoryId"].ToString().ToInt());
+                found.Currency = _context.Currencies.FirstOrDefault(x => x.Id == jsonData["CurrencyId"].ToString().ToInt());
+            }
+
+            _context.SaveChanges();
+            _messageSender.SendMessage($"Client sent transaction with id = {id}");
+        }
+
+        [HttpDelete("transactions/{id}")]
+        public async Task DeleteTransactions(int id)
+        {
+            var todelete = _context.Transactions.FirstOrDefault(x => x.Id == id);
+            _context.Remove(todelete);
+            _context.SaveChanges();
+            _messageSender.SendMessage($"Client deleted transaction with id = {id}");
+        }
+
+        [HttpGet("rabbit")]
+        public async Task<IEnumerable<LogMessage>> Rabbit()
+        {
+            var result = _context.Logs.ToList();
+            _messageSender.SendMessage($"Client received {result.Count} logs");
+            return result;
+        }
+
+        [HttpPost("login")]
+        public async Task<bool> Login([FromBody]UserView user)
+        {
+            var old = _context.Users.FirstOrDefault(x => x.Name == user.Name);
+            if (old == null) return false;
+            if (old.Password != user.Password) return false;
+            return true;
+        }
+
+        [HttpPost("register")]
+        public async Task<bool> Register([FromBody]UserView user)
+        {
+            var newUser = await _context.Users.FirstOrDefaultAsync(u => u.Name == user.Name);
+            if (newUser == null)
+            {
+                _context.Users.Add(user);
+                _context.SaveChanges();
+            }
+            else return false;
+            return true;
         }
 
     }
-    public static class MyExtWithStrings {
+    public static class MyExtWithStrings
+    {
         public static int ToInt(this string str)
         {
             return Convert.ToInt32(str);

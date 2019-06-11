@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ConsulService.Models
 {
-    public class DataContext : IdentityDbContext<User,Role,string>
+    public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options)
               : base(options)
@@ -17,5 +17,6 @@ namespace ConsulService.Models
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<LogMessage> Logs { get; set; }
+        public DbSet<UserView> Users { get; set; }
     }
 }
