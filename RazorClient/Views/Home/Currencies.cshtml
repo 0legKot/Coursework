@@ -15,7 +15,7 @@
         <tr>
             <td><a asp-area="" asp-controller="Home" asp-route-id="@currency.Id" asp-action="Currency"> @currency.Id </a></td>
             <td> @currency.Name </td>
-            <td><a class="btn btn-primary" asp-area="" asp-controller="Home" asp-action="Delete/currencies|@currency.Id">Delete</a></td>
+            <td><a class="btn btn-danger" asp-area="" asp-controller="Home" asp-action="Delete/currencies|@currency.Id">Delete</a></td>
         </tr>
     }
 </table>

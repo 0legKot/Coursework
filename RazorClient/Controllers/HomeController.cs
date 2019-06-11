@@ -18,11 +18,12 @@ namespace RazorClient.Controllers
 {
     public class HomeController : Controller
     {
-        const string apiUri = "https://localhost:44304/api/";
+        const string apiUri = "http://localhost:44303/api/";
         //const string apiUri = "https://localhost:44394/api/values";
         public IActionResult Index()
         {
             IEnumerable<Transaction> messages = JsonConvert.DeserializeObject<IEnumerable<Transaction>>(DoRequest( "/transactions"));
+            ViewData["categorysums"] = messages.GroupBy(x => x.Category).Select(x =>new ViewModel{Name=x.Key?.Name, Value = x.Sum(s => s.Value) });
             return View("Index",messages);
         }
 

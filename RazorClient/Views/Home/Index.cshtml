@@ -10,15 +10,46 @@
 {
     <a class="btn btn-primary" asp-area="" asp-controller="Home" asp-action="Transaction" asp-route-id="0">New Transaction</a>
 }
-<table class="table">
+<h3>Credits:</h3>
+<table background-color="red" class="table">
     <thead><tr><td>Id</td><td>Category</td><td>Value</td><td>Action</td></tr></thead>
-    @foreach (Transaction transaction in Model)
+    @foreach (Transaction transaction in Model.Where(x => x.Category?.IsCredit ?? false))
     {
         <tr>
             <td><a asp-area="" asp-controller="Home" asp-route-id="@transaction.Id" asp-action="Transaction"> @transaction.Id </a></td>
             <td> @transaction.Category?.Name </td>
             <td> @transaction.Value </td>
-            <td><a class="btn btn-primary" asp-area="" asp-controller="Home" asp-action="Delete/transactions|@transaction.Id">Delete</a></td>
+            <td><a class="btn btn-danger" asp-area="" asp-controller="Home" asp-action="Delete/transactions|@transaction.Id">Delete</a></td>
         </tr>
     }
+
 </table>
+<h3>Debits:</h3>
+<table class="table">
+    <thead><tr><td>Id</td><td>Category</td><td>Value</td><td>Action</td></tr></thead>
+    @foreach (Transaction transaction in Model.Where(x => !x.Category?.IsCredit ?? false))
+    {
+        <tr background-color="green">
+            <td><a asp-area="" asp-controller="Home" asp-route-id="@transaction.Id" asp-action="Transaction"> @transaction.Id </a></td>
+            <td> @transaction.Category?.Name </td>
+            <td> @transaction.Value </td>
+            <td><a class="btn btn-danger" asp-area="" asp-controller="Home" asp-action="Delete/transactions|@transaction.Id">Delete</a></td>
+        </tr>
+    }
+
+</table>
+@if (ViewData["categorysums"] != null)
+{
+    <h3>Sums by Category:</h3>
+    <table class="table">
+        <thead><tr><td>Category</td><td>Value</td></tr></thead>
+        @foreach (ViewModel gr in (IEnumerable<object>)ViewData["categorysums"])
+        {
+            <tr>
+                <td> @gr.Name </td>
+                <td> @gr.Value </td>
+            </tr>
+        }
+
+    </table>
+}

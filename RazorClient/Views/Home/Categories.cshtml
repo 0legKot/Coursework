@@ -17,7 +17,7 @@
         <tr>
             <td> <a asp-area="" asp-controller="Home" asp-action="Category" asp-route-id="@category.Id">@category.Id</a> </td>
             <td> @category.Name </td>
-            <td><a class="btn btn-primary" asp-area="" asp-controller="Home" asp-route-what="categories|@category.Id" asp-action="Delete">Delete</a></td>
+            <td><a class="btn btn-danger" asp-area="" asp-controller="Home" asp-route-what="categories|@category.Id" asp-action="Delete">Delete</a></td>
         </tr>
     }
 </table>
